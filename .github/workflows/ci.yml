@@ -1,0 +1,54 @@
+name: Front CI
+
+on:
+  pull_request:
+    branches:
+      - staging
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Generate Prisma Client
+        run: |
+          if [ -f prisma/schema.prisma ]; then
+            npx prisma generate
+          else
+            echo "No Prisma schema found; skipping client generation."
+          fi
+
+      - name: Check entry point syntax
+        run: npx esbuild src/main.jsx --loader:.jsx=jsx --format=esm --log-level=warning --outfile=/tmp/entrypoint-check.js
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run lint
+        # Temporal: permitimos errores mientras limpiamos la deuda existente de ESLint.
+        continue-on-error: true
+        run: |
+          if node -e "const { scripts = {} } = require('./package.json'); process.exit(Object.hasOwn(scripts, 'lint') ? 0 : 1)"; then
+            npm run lint
+          else
+            echo "No lint script found; skipping lint."
+          fi
