@@ -1,6 +1,6 @@
-# Auth Template Web
+# Email A11y QA Web
 
-Frontend React reutilizable para la API `template-auth-back`. Incluye acceso privado por invitación, perfil, demostración de ruta privada y administración de usuarios. No permite que una persona se registre por su cuenta.
+Frontend React de Email A11y QA. Incluye acceso privado por invitación, perfil, administración de usuarios y creación inicial de organización. No permite que una persona se registre por su cuenta.
 
 ## Stack
 
@@ -48,7 +48,7 @@ npm run lint
 | `/reset-password#token=...` | Público | Contraseña inicial de invitación o recuperación |
 | `/verify-email#token=...` | Público | Verificación automática |
 | `/password-change-required` | Sesión limitada | Cambio obligatorio cuando han pasado 90 días |
-| `/dashboard` | Privado | Demostración mínima de sesión |
+| `/dashboard` | Privado | Creación y resumen de la organización del usuario |
 | `/profile` | Privado | Perfil y cambio de contraseña |
 | `/admin/users` | `ADMIN` / `SUPERADMIN` | Concesión de acceso, búsqueda, paginación, roles y estado |
 
@@ -94,17 +94,17 @@ Los formularios y cabeceras responden desde 320 px. El cambio obligatorio reutil
 
 ## Integración con el backend
 
-El backend utiliza MySQL de forma predeterminada y también incluye PostgreSQL mediante Docker. Antes de iniciar el frontend, sigue en su README uno de los dos recorridos completos; no debes arrancar el contenedor PostgreSQL cuando trabajes con MySQL.
+El backend utiliza exclusivamente PostgreSQL y puede iniciarse mediante el Docker Compose incluido. Sigue su README para generar Prisma y aplicar las migraciones antes de iniciar el frontend.
 
 En desarrollo, configura exactamente el mismo origen frontend en `FRONTEND_URL` y dentro de `CORS_ALLOWED_ORIGINS` del backend. Una vez preparada la base elegida, ambos servidores deben ejecutarse a la vez:
 
 ```bash
 # terminal 1
-cd ../template-auth-back
+cd ../email-a11y-qa-api
 npm run dev
 
 # terminal 2
-cd ../template-auth-front
+cd ../email-a11y-qa-web
 npm run dev
 ```
 
@@ -112,7 +112,7 @@ En producción, frontend y API deben usar HTTPS para que el navegador acepte las
 
 ## Reutilizar la plantilla
 
-1. Copia `template-auth-front` y `template-auth-back` como repositorios separados.
+1. Clona `email-a11y-qa-web` y `email-a11y-qa-api` como repositorios separados.
 2. Cambia `VITE_APP_NAME` y `APP_NAME`.
 3. Configura los dos archivos `.env` sin versionarlos.
 4. Ajusta colores en `tailwind.config.js` o en los componentes UI.
