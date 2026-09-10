@@ -50,7 +50,7 @@ npm run lint
 | `/password-change-required` | Sesión limitada | Cambio obligatorio cuando han pasado 90 días |
 | `/dashboard` | Privado | Creación y resumen de la organización del usuario |
 | `/organization/members` | Privado | Listado, invitación y gestión autorizada de miembros de organización |
-| `/organization/clients` | Privado | Listado y creación autorizada de clientes activos |
+| `/organization/clients` | Privado | Listado de clientes activos y archivados, creación y restauración autorizadas |
 | `/organization/clients/:clientId` | Privado | Consulta, edición y archivado autorizado de un cliente |
 | `/organization/clients/:clientId/campaigns/:campaignId` | Privado | Consulta, edición y archivado autorizado de una campaña |
 | `/profile` | Privado | Perfil y cambio de contraseña |
@@ -88,7 +88,7 @@ Las cuentas nuevas aparecen como «Invitación pendiente» hasta que la persona 
 
 ## Clientes
 
-La navegación privada incluye un área «Clientes». Todos los roles de organización pueden ver el listado y abrir un cliente. `OWNER` y `ADMIN` ven además los controles para crear, cambiar el nombre y archivar con confirmación; `EDITOR` y `VIEWER` conservan una interfaz de solo lectura. Los clientes archivados permanecen en PostgreSQL pero desaparecen del listado normal.
+La navegación privada incluye un área «Clientes». Todos los roles de organización ven primero los clientes activos y después los archivados, que aparecen atenuados y no pueden abrirse. `OWNER` y `ADMIN` ven además los controles para crear, cambiar el nombre, archivar con confirmación y restaurar; `EDITOR` y `VIEWER` conservan una interfaz de solo lectura. Los clientes archivados permanecen en PostgreSQL con todos sus datos y campañas.
 
 ## Campañas
 
