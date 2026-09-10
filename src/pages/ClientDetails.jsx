@@ -9,6 +9,7 @@ import {
   updateClientRequest,
 } from "../api/clients.js";
 import { getOrganizationRequest } from "../api/organizations.js";
+import { ClientCampaigns } from "../components/campaigns/ClientCampaigns.jsx";
 import { Alert } from "../components/ui/Alert.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { Input } from "../components/ui/Input.jsx";
@@ -146,6 +147,8 @@ export function ClientDetails() {
       ) : (
         <Alert>Tu rol permite consultar este cliente, pero no modificarlo.</Alert>
       )}
+
+      <ClientCampaigns clientId={client.id} canManage={canManage} />
     </div>
   );
 }

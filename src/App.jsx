@@ -4,6 +4,7 @@ import { AdminRoute } from "./routes/AdminRoute.jsx";
 import { PrivateRoute } from "./routes/PrivateRoute.jsx";
 import { PublicRoute } from "./routes/PublicRoute.jsx";
 import { Dashboard } from "./pages/Dashboard.jsx";
+import { CampaignDetails } from "./pages/CampaignDetails.jsx";
 import { ClientDetails } from "./pages/ClientDetails.jsx";
 import { Clients } from "./pages/Clients.jsx";
 import { ForgotPassword } from "./pages/ForgotPassword.jsx";
@@ -34,6 +35,10 @@ export default function App() {
           <Route path="/organization/members" element={<OrganizationMembers />} />
           <Route path="/organization/clients" element={<Clients />} />
           <Route path="/organization/clients/:clientId" element={<ClientDetails />} />
+          <Route
+            path="/organization/clients/:clientId/campaigns/:campaignId"
+            element={<CampaignDetails />}
+          />
           <Route path="/profile" element={<Profile />} />
           <Route element={<AdminRoute />}>
             <Route path="/admin/users" element={<UsersAdmin />} />

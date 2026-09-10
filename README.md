@@ -52,6 +52,7 @@ npm run lint
 | `/organization/members` | Privado | Listado, invitación y gestión autorizada de miembros de organización |
 | `/organization/clients` | Privado | Listado y creación autorizada de clientes activos |
 | `/organization/clients/:clientId` | Privado | Consulta, edición y archivado autorizado de un cliente |
+| `/organization/clients/:clientId/campaigns/:campaignId` | Privado | Consulta, edición y archivado autorizado de una campaña |
 | `/profile` | Privado | Perfil y cambio de contraseña |
 | `/admin/users` | `ADMIN` / `SUPERADMIN` | Concesión de acceso, búsqueda, paginación, roles y estado |
 
@@ -76,6 +77,7 @@ Las operaciones se separan en:
 - `src/api/users.js`: administración
 - `src/api/organizations.js`: organizaciones, miembros e invitaciones
 - `src/api/clients.js`: clientes de organización
+- `src/api/campaigns.js`: campañas de cliente
 
 ## Invitaciones de organización
 
@@ -86,6 +88,10 @@ Las cuentas nuevas aparecen como «Invitación pendiente» hasta que la persona 
 ## Clientes
 
 La navegación privada incluye un área «Clientes». Todos los roles de organización pueden ver el listado y abrir un cliente. `OWNER` y `ADMIN` ven además los controles para crear, cambiar el nombre y archivar con confirmación; `EDITOR` y `VIEWER` conservan una interfaz de solo lectura. Los clientes archivados permanecen en PostgreSQL pero desaparecen del listado normal.
+
+## Campañas
+
+El detalle de cliente incluye el listado de sus campañas activas. `OWNER` y `ADMIN` pueden crear campañas, abrir su detalle, cambiarles el nombre y archivarlas con confirmación. `EDITOR` y `VIEWER` pueden listar y consultar sin controles de escritura. La pantalla de campaña muestra el cliente propietario y el estado vacío previo a la futura importación de email; todavía no contiene editor HTML ni preview.
 
 Axios conserva su comportamiento normal de errores: las promesas rechazadas no se convierten en falsos éxitos.
 
