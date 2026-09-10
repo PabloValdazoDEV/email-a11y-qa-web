@@ -49,7 +49,9 @@ npm run lint
 | `/verify-email#token=...` | Público | Verificación automática |
 | `/password-change-required` | Sesión limitada | Cambio obligatorio cuando han pasado 90 días |
 | `/dashboard` | Privado | Creación y resumen de la organización del usuario |
-| `/organization/members` | Privado | Listado y gestión autorizada de miembros de organización |
+| `/organization/members` | Privado | Listado, invitación y gestión autorizada de miembros de organización |
+| `/organization/clients` | Privado | Listado y creación autorizada de clientes activos |
+| `/organization/clients/:clientId` | Privado | Consulta, edición y archivado autorizado de un cliente |
 | `/profile` | Privado | Perfil y cambio de contraseña |
 | `/admin/users` | `ADMIN` / `SUPERADMIN` | Concesión de acceso, búsqueda, paginación, roles y estado |
 
@@ -72,6 +74,18 @@ Las operaciones se separan en:
 - `src/api/api.js`: cliente e interceptor
 - `src/api/auth.js`: autenticación y perfil
 - `src/api/users.js`: administración
+- `src/api/organizations.js`: organizaciones, miembros e invitaciones
+- `src/api/clients.js`: clientes de organización
+
+## Invitaciones de organización
+
+La pantalla de miembros permite que un `OWNER` invite `ADMIN`, `EDITOR` o `VIEWER`. Un `ADMIN` de organización puede invitar únicamente `EDITOR` o `VIEWER`; el formulario no aparece para `EDITOR` ni `VIEWER`. Nombre y apellidos se utilizan solo si el email todavía no tiene una cuenta.
+
+Las cuentas nuevas aparecen como «Invitación pendiente» hasta que la persona utiliza el enlace recibido y crea su contraseña. Si el email ya tiene una cuenta activa, se añade directamente a la organización sin cambiar su password ni su rol global. Los mensajes de éxito o de entrega SMTP fallida se muestran mediante el sistema de toasts existente.
+
+## Clientes
+
+La navegación privada incluye un área «Clientes». Todos los roles de organización pueden ver el listado y abrir un cliente. `OWNER` y `ADMIN` ven además los controles para crear, cambiar el nombre y archivar con confirmación; `EDITOR` y `VIEWER` conservan una interfaz de solo lectura. Los clientes archivados permanecen en PostgreSQL pero desaparecen del listado normal.
 
 Axios conserva su comportamiento normal de errores: las promesas rechazadas no se convierten en falsos éxitos.
 

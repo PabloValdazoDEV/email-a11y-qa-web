@@ -9,3 +9,5 @@ export const updateOrganizationMemberRequest = (organizationId, membershipId, da
   api.patch(`/api/v1/organizations/${organizationId}/members/${membershipId}`, data);
 export const deleteOrganizationMemberRequest = (organizationId, membershipId) =>
   api.delete(`/api/v1/organizations/${organizationId}/members/${membershipId}`);
+export const createOrganizationInvitationRequest = (organizationId, data) =>
+  api.post(`/api/v1/organizations/${organizationId}/invitations`, data);

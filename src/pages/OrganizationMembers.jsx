@@ -7,6 +7,7 @@ import {
   getOrganizationsRequest,
   updateOrganizationMemberRequest,
 } from "../api/organizations.js";
+import { InviteOrganizationMemberForm } from "../components/organizations/InviteOrganizationMemberForm.jsx";
 import { Alert } from "../components/ui/Alert.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { Spinner } from "../components/ui/Spinner.jsx";
@@ -14,6 +15,11 @@ import { getErrorMessage } from "../utils/errors.js";
 
 const ownerRoles = ["ADMIN", "EDITOR", "VIEWER"];
 const adminRoles = ["EDITOR", "VIEWER"];
+const statusLabels = Object.freeze({
+  ACTIVE: "Activo",
+  INACTIVE: "Inactivo",
+  INVITATION_PENDING: "Invitación pendiente",
+});
 
 function canManageMember(actorRole, memberRole) {
   if (memberRole === "OWNER") return false;
@@ -91,6 +97,10 @@ export function OrganizationMembers() {
     }
   }
 
+  function addInvitedMember(member) {
+    setMembers((current) => [...current, member]);
+  }
+
   if (loading) return <Spinner label="Cargando miembros..." />;
 
   if (error) {
@@ -131,6 +141,14 @@ export function OrganizationMembers() {
         </p>
       </header>
 
+      {["OWNER", "ADMIN"].includes(actorRole) && (
+        <InviteOrganizationMemberForm
+          organizationId={organization.id}
+          actorRole={actorRole}
+          onInvited={addInvitedMember}
+        />
+      )}
+
       {members.length === 0 ? (
         <Alert>No hay miembros en esta organización.</Alert>
       ) : (
@@ -151,6 +169,15 @@ export function OrganizationMembers() {
                     <p className="break-all text-sm text-zinc-600">{member.user.email}</p>
                     <p className="mt-2 text-sm font-semibold text-indigo-800">
                       Rol: {member.role}
+                    </p>
+                    <p className={`mt-1 text-xs font-semibold ${
+                      member.status === "ACTIVE"
+                        ? "text-emerald-700"
+                        : member.status === "INACTIVE"
+                          ? "text-red-700"
+                          : "text-amber-700"
+                    }`}>
+                      {statusLabels[member.status] ?? member.status}
                     </p>
                     {member.role === "OWNER" && (
                       <p className="mt-1 text-xs text-zinc-600">Propietario protegido</p>
