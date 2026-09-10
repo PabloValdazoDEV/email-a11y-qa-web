@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard.jsx";
 import { ForgotPassword } from "./pages/ForgotPassword.jsx";
 import { Login } from "./pages/Login.jsx";
 import { NotFound } from "./pages/NotFound.jsx";
+import { OrganizationMembers } from "./pages/OrganizationMembers.jsx";
 import { PasswordChangeRequired } from "./pages/PasswordChangeRequired.jsx";
 import { Profile } from "./pages/Profile.jsx";
 import { ResetPassword } from "./pages/ResetPassword.jsx";
@@ -28,6 +29,7 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/organization/members" element={<OrganizationMembers />} />
           <Route path="/profile" element={<Profile />} />
           <Route element={<AdminRoute />}>
             <Route path="/admin/users" element={<UsersAdmin />} />

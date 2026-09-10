@@ -49,6 +49,7 @@ npm run lint
 | `/verify-email#token=...` | Público | Verificación automática |
 | `/password-change-required` | Sesión limitada | Cambio obligatorio cuando han pasado 90 días |
 | `/dashboard` | Privado | Creación y resumen de la organización del usuario |
+| `/organization/members` | Privado | Listado y gestión autorizada de miembros de organización |
 | `/profile` | Privado | Perfil y cambio de contraseña |
 | `/admin/users` | `ADMIN` / `SUPERADMIN` | Concesión de acceso, búsqueda, paginación, roles y estado |
 

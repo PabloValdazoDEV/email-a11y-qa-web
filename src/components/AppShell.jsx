@@ -36,6 +36,9 @@ export function AppShell() {
             <NavLink to="/dashboard" className={navClass}>
               Inicio
             </NavLink>
+            <NavLink to="/organization/members" className={navClass}>
+              Miembros
+            </NavLink>
             <NavLink to="/profile" className={navClass}>
               Perfil
             </NavLink>
