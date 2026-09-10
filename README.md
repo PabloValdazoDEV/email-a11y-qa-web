@@ -78,6 +78,7 @@ Las operaciones se separan en:
 - `src/api/organizations.js`: organizaciones, miembros e invitaciones
 - `src/api/clients.js`: clientes de organización
 - `src/api/campaigns.js`: campañas de cliente
+- `src/api/drafts.js`: borrador HTML de una campaña
 
 ## Invitaciones de organización
 
@@ -91,7 +92,13 @@ La navegación privada incluye un área «Clientes». Todos los roles de organiz
 
 ## Campañas
 
-El detalle de cliente incluye el listado de sus campañas activas. `OWNER` y `ADMIN` pueden crear campañas, abrir su detalle, cambiarles el nombre y archivarlas con confirmación. `EDITOR` y `VIEWER` pueden listar y consultar sin controles de escritura. La pantalla de campaña muestra el cliente propietario y el estado vacío previo a la futura importación de email; todavía no contiene editor HTML ni preview.
+El detalle de cliente incluye el listado de sus campañas activas. `OWNER` y `ADMIN` pueden crear campañas, abrir su detalle, cambiarles el nombre y archivarlas con confirmación. `EDITOR` y `VIEWER` pueden listar y consultar sin controles de escritura. La pantalla de campaña muestra el cliente propietario y contiene el área de trabajo del borrador descrita a continuación.
+
+## Borrador HTML
+
+El detalle de campaña permite pegar HTML o importar un único archivo `.html`/`.htm` de hasta 1 MiB. El código se muestra y edita como texto dentro de un textarea; nunca se inserta como HTML en el DOM ni se ejecuta. Una edición conserva el HTML original y modifica solo el contenido de trabajo, mientras que sustituir o importar actualiza ambos.
+
+`OWNER`, `ADMIN` y `EDITOR` pueden crear, sustituir e importar el borrador. `VIEWER` puede leer el HTML actual sin controles de escritura. La interfaz incluye estados de carga y error, validación del fichero, nombre seleccionado, botones deshabilitados y feedback mediante toasts. Todavía no existe preview ni editor avanzado.
 
 Axios conserva su comportamiento normal de errores: las promesas rechazadas no se convierten en falsos éxitos.
 

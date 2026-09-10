@@ -10,6 +10,7 @@ import {
 } from "../api/campaigns.js";
 import { getClientRequest } from "../api/clients.js";
 import { getOrganizationRequest } from "../api/organizations.js";
+import { CampaignDraft } from "../components/campaigns/CampaignDraft.jsx";
 import { Alert } from "../components/ui/Alert.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { Input } from "../components/ui/Input.jsx";
@@ -110,6 +111,9 @@ export function CampaignDetails() {
   }
 
   const canManage = ["OWNER", "ADMIN"].includes(organization.membership.role);
+  const canEditDraft = ["OWNER", "ADMIN", "EDITOR"].includes(
+    organization.membership.role,
+  );
 
   return (
     <div className="space-y-6">
@@ -129,7 +133,7 @@ export function CampaignDetails() {
         <p className="mt-2 text-sm font-semibold text-emerald-700">Activa</p>
       </header>
 
-      <Alert>Todavía no hay ningún email importado.</Alert>
+      <CampaignDraft campaignId={campaign.id} canEdit={canEditDraft} />
 
       {canManage ? (
         <section
