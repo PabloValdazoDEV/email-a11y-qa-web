@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+const nodeApiUrl = globalThis.process?.env?.VITE_API_URL;
+const baseURL = (import.meta.env?.VITE_API_URL ?? nodeApiUrl)?.replace(/\/$/, "");
 if (!baseURL) throw new Error("VITE_API_URL is required");
 
 export const api = axios.create({

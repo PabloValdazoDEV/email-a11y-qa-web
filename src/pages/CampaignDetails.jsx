@@ -11,6 +11,7 @@ import {
 import { getClientRequest } from "../api/clients.js";
 import { getOrganizationRequest } from "../api/organizations.js";
 import { CampaignDraft } from "../components/campaigns/CampaignDraft.jsx";
+import { CampaignRevisions } from "../components/campaigns/CampaignRevisions.jsx";
 import { Alert } from "../components/ui/Alert.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { Input } from "../components/ui/Input.jsx";
@@ -134,6 +135,7 @@ export function CampaignDetails() {
       </header>
 
       <CampaignDraft campaignId={campaign.id} canEdit={canEditDraft} />
+      <CampaignRevisions campaignId={campaign.id} canCreate={canEditDraft} />
 
       {canManage ? (
         <section

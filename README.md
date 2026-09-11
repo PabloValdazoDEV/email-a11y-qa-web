@@ -81,6 +81,7 @@ Las operaciones se separan en:
 - `src/api/clients.js`: clientes de organización
 - `src/api/campaigns.js`: campañas de cliente
 - `src/api/drafts.js`: borrador HTML de una campaña
+- `src/api/revisions.js`: snapshots inmutables de una campaña
 
 ## Invitaciones de organización
 
@@ -105,6 +106,12 @@ El detalle de campaña permite pegar HTML o importar un único archivo `.html`/`
 La «Preview de edición» es una representación aproximada derivada en memoria de `htmlCurrent`; nunca sustituye ni escribe `htmlOriginal` o `htmlCurrent`. DOMPurify elimina elementos activos, formularios, frames anidados, handlers y atributos de recursos o navegación. Los bloques `<style>` se descartan, mientras que los estilos inline se conservan sin referencias `url()`. El resultado se renderiza exclusivamente mediante `srcDoc` dentro de un iframe `sandbox` sin permisos, con `referrerPolicy="no-referrer"` y una CSP que bloquea scripts, imágenes, fuentes, conexiones, objetos, frames y formularios. Las imágenes permanecen siempre desactivadas en este hito.
 
 La preview ofrece tamaños Desktop (680 px) y Móvil (375 px). Al editar, se vuelve a derivar tras un debounce de 400 ms sin cambiar el guardado manual existente. Todavía no existe emulación real de Gmail, Outlook o Apple Mail ni un editor avanzado.
+
+## Revisiones
+
+El detalle de campaña incluye un histórico de revisiones ordenado de más reciente a más antigua. `OWNER`, `ADMIN` y `EDITOR` pueden guardar un snapshot del último Draft persistido; `VIEWER` puede listar y consultar, pero no ve el control de creación. La interfaz contempla estados de carga, error, reintento y listado vacío.
+
+Al seleccionar una revisión se solicita su contenido completo y se muestran autor, fecha, versión, hash SHA-256, HTML corregido, HTML original desplegable y estado «Solo lectura». No existen controles para editar o eliminar. La visualización de `htmlCorrected` reutiliza `EmailPreview`, por lo que mantiene el saneado, la CSP, el iframe sandbox y las imágenes desactivadas del Hito 6.
 
 Axios conserva su comportamiento normal de errores: las promesas rechazadas no se convierten en falsos éxitos.
 
