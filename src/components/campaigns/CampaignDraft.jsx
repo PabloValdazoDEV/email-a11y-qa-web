@@ -15,6 +15,7 @@ import { Alert } from "../ui/Alert.jsx";
 import { Button } from "../ui/Button.jsx";
 import { Spinner } from "../ui/Spinner.jsx";
 import { Textarea } from "../ui/Textarea.jsx";
+import { EmailPreview } from "./EmailPreview.jsx";
 
 export function CampaignDraft({ campaignId, canEdit }) {
   const [draft, setDraft] = useState(null);
@@ -30,11 +31,14 @@ export function CampaignDraft({ campaignId, canEdit }) {
     handleSubmit,
     reset,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(draftHtmlSchema),
     defaultValues: { html: "" },
   });
+  const isTextMode = ["paste", "edit", "replace"].includes(mode);
+  const previewHtml = isTextMode ? watch("html") : draft?.htmlCurrent ?? "";
 
   const loadDraft = useCallback(async () => {
     setLoading(true);
@@ -146,14 +150,17 @@ export function CampaignDraft({ campaignId, canEdit }) {
             <div className="mt-4 space-y-4">
               <p className="text-sm font-semibold text-emerald-700">Borrador guardado</p>
               {mode !== "edit" && mode !== "replace" && (
-                <Textarea
-                  id="saved-draft-html"
-                  label="HTML actual"
-                  value={draft.htmlCurrent}
-                  readOnly
-                  spellCheck="false"
-                  hint="El código se muestra como texto y no se ejecuta."
-                />
+                <div className="grid gap-5 2xl:grid-cols-2">
+                  <Textarea
+                    id="saved-draft-html"
+                    label="HTML actual"
+                    value={draft.htmlCurrent}
+                    readOnly
+                    spellCheck="false"
+                    hint="El código se muestra como texto y no se ejecuta."
+                  />
+                  <EmailPreview html={previewHtml} />
+                </div>
               )}
             </div>
           ) : (
@@ -182,18 +189,21 @@ export function CampaignDraft({ campaignId, canEdit }) {
             </div>
           )}
 
-          {canEdit && ["paste", "edit", "replace"].includes(mode) && (
+          {canEdit && isTextMode && (
             <form onSubmit={handleSubmit(saveText)} className="mt-5 space-y-4" noValidate>
               {errors.root && <Alert tone="error">{errors.root.message}</Alert>}
-              <Textarea
-                id="draft-html"
-                label="HTML del email"
-                registration={register("html")}
-                error={errors.html}
-                disabled={isSubmitting}
-                spellCheck="false"
-                hint="Máximo 1 MiB. El contenido se guardará sin ejecutarse ni corregirse."
-              />
+              <div className="grid gap-5 2xl:grid-cols-2">
+                <Textarea
+                  id="draft-html"
+                  label="HTML del email"
+                  registration={register("html")}
+                  error={errors.html}
+                  disabled={isSubmitting}
+                  spellCheck="false"
+                  hint="Máximo 1 MiB. El contenido se guardará sin ejecutarse ni corregirse."
+                />
+                <EmailPreview html={previewHtml} />
+              </div>
               <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <Button type="button" variant="secondary" onClick={cancelAction} disabled={isSubmitting}>
                   Cancelar

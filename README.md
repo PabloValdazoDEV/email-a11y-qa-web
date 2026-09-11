@@ -8,6 +8,7 @@ Frontend React de Email A11y QA. Incluye acceso privado por invitación, perfil,
 - React Router
 - Axios con cookies y refresh single-flight
 - React Hook Form y Zod
+- DOMPurify para la representación derivada de la preview
 - Tailwind CSS
 - react-hot-toast
 
@@ -37,6 +38,7 @@ npm run dev
 npm run build
 npm run preview
 npm run lint
+npm test
 ```
 
 ## Rutas
@@ -96,9 +98,13 @@ El detalle de cliente incluye el listado de sus campañas activas. `OWNER` y `AD
 
 ## Borrador HTML
 
-El detalle de campaña permite pegar HTML o importar un único archivo `.html`/`.htm` de hasta 1 MiB. El código se muestra y edita como texto dentro de un textarea; nunca se inserta como HTML en el DOM ni se ejecuta. Una edición conserva el HTML original y modifica solo el contenido de trabajo, mientras que sustituir o importar actualiza ambos.
+El detalle de campaña permite pegar HTML o importar un único archivo `.html`/`.htm` de hasta 1 MiB. El código se muestra y edita como texto dentro de un textarea; nunca se inserta como HTML en el DOM principal. Una edición conserva el HTML original y modifica solo el contenido de trabajo, mientras que sustituir o importar actualiza ambos.
 
-`OWNER`, `ADMIN` y `EDITOR` pueden crear, sustituir e importar el borrador. `VIEWER` puede leer el HTML actual sin controles de escritura. La interfaz incluye estados de carga y error, validación del fichero, nombre seleccionado, botones deshabilitados y feedback mediante toasts. Todavía no existe preview ni editor avanzado.
+`OWNER`, `ADMIN` y `EDITOR` pueden crear, sustituir e importar el borrador. `VIEWER` puede leer el HTML actual y consultar su preview sin controles de escritura. La interfaz incluye estados de carga y error, validación del fichero, nombre seleccionado, botones deshabilitados y feedback mediante toasts.
+
+La «Preview de edición» es una representación aproximada derivada en memoria de `htmlCurrent`; nunca sustituye ni escribe `htmlOriginal` o `htmlCurrent`. DOMPurify elimina elementos activos, formularios, frames anidados, handlers y atributos de recursos o navegación. Los bloques `<style>` se descartan, mientras que los estilos inline se conservan sin referencias `url()`. El resultado se renderiza exclusivamente mediante `srcDoc` dentro de un iframe `sandbox` sin permisos, con `referrerPolicy="no-referrer"` y una CSP que bloquea scripts, imágenes, fuentes, conexiones, objetos, frames y formularios. Las imágenes permanecen siempre desactivadas en este hito.
+
+La preview ofrece tamaños Desktop (680 px) y Móvil (375 px). Al editar, se vuelve a derivar tras un debounce de 400 ms sin cambiar el guardado manual existente. Todavía no existe emulación real de Gmail, Outlook o Apple Mail ni un editor avanzado.
 
 Axios conserva su comportamiento normal de errores: las promesas rechazadas no se convierten en falsos éxitos.
 
